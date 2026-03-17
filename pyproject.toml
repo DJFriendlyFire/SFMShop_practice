@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "fastapi-study"
+version = "0.1.0"
+description = ""
+authors = ["DJFriendlyFire <melnikovich2014@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standard"], version = "^0.129.0"}
+sqlalchemy = "^2.0.46"
+black = "^26.1.0"
+asyncpg = "^0.31.0"
+requests = "^2.32.5"
+psycopg2 = "^2.9.11"
+pytest = "^9.0.2"
+notebook = "^7.5.4"
+jose = "^1.0.0"
+python-jose = {extras = ["cryptography"], version = "^3.5.0"}
+python-multipart = "^0.0.22"
+bcrypt = "3.2.2"
+passlib = "^1.7.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

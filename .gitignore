@@ -1,0 +1,170 @@
+# ================================
+# Python / Poetry
+# ================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Poetry
+.poetry/
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+poetry.lock~  # backup files, keep poetry.lock itself!
+
+# ================================
+# Environment Variables & Secrets
+# ================================
+.env
+.env.local
+.env.*.local
+*.env
+.env.backup
+*.secret
+secrets/
+credentials.json
+service_account.json
+
+# ================================
+# macOS
+# ================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+*.db
+*.sqlite
+*.sqlite3
+
+# ================================
+# IDE / Editors
+# ================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim / NeoVim
+*.swp
+*.swo
+*.swn
+*~
+*.bak
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ================================
+# Jupyter Notebook
+# ================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+jupyter_notebook_config.py
+jupyter_custom/
+
+# ================================
+# Testing & Coverage
+# ================================
+.pytest_cache/
+.coverage
+coverage.xml
+coverage.json
+htmlcov/
+.tox/
+.nox/
+
+# ================================
+# Database & Migrations (optional)
+# ================================
+# Раскомментируйте, если не хотите коммитить локальные БД
+# *.db
+# *.sqlite
+# *.sqlite3
+# migrations/  # если используете Alembic и не хотите коммитить локальные миграции
+
+# ================================
+# Logs & Temp
+# ================================
+*.log
+logs/
+temp/
+tmp/
+*.tmp
+*.temp
+
+# ================================
+# Documentation
+# ================================
+site/
+docs/_build/
+*.pdf
+*.rst~
+
+# ================================
+# OS / System
+# ================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ================================
+# Security / Keys
+# ================================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+*.ppk
+
+# ================================
+# Frontend / Build (если будет)
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# ================================
+# Misc
+# ================================
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.dump
+*.sql
+!schema.sql  # если хотите сохранять схему
