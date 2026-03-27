@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from decimal import Decimal
 from typing import Optional
+from uuid import uuid4
 
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -41,3 +42,10 @@ class OrderUpdate(BaseModel):
         None, min_length=10, description="Адрес доставки"
     )
     notes: Optional[str] = Field(None, description="Комментарий к заказу")
+
+
+class OrderCreateEvent(BaseModel):
+    event_id: str = Field(default_factory=lambda: str(uuid4()))
+    event_type: str = "order.created"
+    occurred_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
+    data: OrderResponse
