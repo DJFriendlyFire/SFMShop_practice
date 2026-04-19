@@ -1,11 +1,13 @@
-import logging
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import uvicorn
 from asyncpg import Pool
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Depends, status, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -17,9 +19,8 @@ from src.database.connection import init_pool, close_pool
 from src.database.dependencies import get_db_pool
 from src.database.queries import orders as order_queries
 from src.models.order import OrderCreate
+from src.services.log_service import log_service
 from src.services.queue_producer import QueueProducer
-
-load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -35,19 +36,19 @@ producer = QueueProducer(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
-    print(f"Запуск приложения...")
+    log_service.info("Запуск приложения")
     await init_pool()
-    print("Пул БД инициализирован.")
+    log_service.info("Пул ДБ инициализирован")
     await producer.connect()
-    print("Коннект с Producer инициализирован.")
+    log_service.info("RabbitMQ: коннект с producer инициализирован")
 
     yield
 
-    print("Завершение работы приложения...")
+    log_service.info("Завершение работы приложения")
     await close_pool()
-    print("Пул ДЛ закрыт.")
+    log_service.info("ДБ пул закрыт")
     await producer.close()
-    print("коннект с Producer закрыт.")
+    log_service.info("RabbitMQ: коннект с producer закрыт")
 
 
 app = FastAPI(
@@ -56,12 +57,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%H:%M:%S",
-)
-logger = logging.getLogger(__name__)
 
 app.middleware("http")(logging_middleware)
 
@@ -96,18 +91,19 @@ async def create_order(
     """Создать новый заказ"""
 
     request_id = request.state.request_id
-    logger.info(f"UUID [{request_id}] create order started")
+    log_service.info(f"UUID [{request_id}] create order started")
 
     async with pool.acquire() as conn:
         order = await order_queries.create_order_with_conn(order_in, conn)
 
         if order is None:
+            log_service.error("Ошибка при создании заказа", uuid=request_id)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Ошибка при создании заказа",
             )
 
-        logger.info(f"UUID [{request_id}] create order id={order.id} finished")
+        log_service.info(f"UUID [{request_id}] create order id={order.id} finished")
 
         try:
             await producer.send_order_task(task_type="send_email", order_data=order)
@@ -116,9 +112,17 @@ async def create_order(
                 task_type="generate_report", order_data=order
             )
         except Exception as e:
-            logger.error(f"UUID [{request_id}] Failed to send tasks to RabbitMQ: {e}")
+            log_service.error(
+                f"UUID [{request_id}] Failed to send tasks to RabbitMQ: {e}"
+            )
 
         return order
+
+
+@app.get("/debug/crash")
+async def debug_crash():
+    """Эндпоинт для тестирования Sentry — всегда падает"""
+    raise Exception("Тестовая ошибка для Sentry!")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sfmshop-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sfmshop
+  template:
+    metadata:
+      labels:
+        app: sfmshop
+    spec:
+      containers:
+      - name: app
+        image: sfmshop:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://user:password@db:5432/sfmshop"
