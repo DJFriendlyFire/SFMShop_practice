@@ -41,11 +41,11 @@ jobs:
         env:
           SECRET_KEY: test_secret_key
           ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+          REFRESH_TOKEN_EXPIRE_DAYS: "3"
           ALGORITHM: HS256
           DB_USER: test_user
           DB_PASSWORD: test_password
           DB_NAME: test_db
           DB_HOST: localhost
           DB_PORT: "5432"
-        run: |
-          poetry run python -m pytest -vv -ra --maxfail=1 --tb=short --cov=src --cov-report=term-missing
+        run: poetry run python -m pytest -vv -ra --maxfail=1 --tb=short --cov=src --cov-report=term-missing
