@@ -27,6 +27,16 @@ jobs:
       - name: Установить зависимости
         run: poetry install --no-interaction --no-root
 
+      - name: Диагностика окружения
+        run: |
+          python --version
+          pip --version
+          poetry --version
+          poetry env info
+          poetry run python --version
+          poetry run python -c "import pytest; print(pytest.__version__)"
+          poetry run python -c "import pytest_cov; print(pytest_cov.__version__)"
+
       - name: Запустить тесты с покрытием
         env:
           SECRET_KEY: test_secret_key
@@ -37,4 +47,5 @@ jobs:
           DB_NAME: test_db
           DB_HOST: localhost
           DB_PORT: "5432"
-        run: poetry run pytest -vv -ra --maxfail=1 --tb=short --cov=src --cov-report=term-missing
+        run: |
+          poetry run python -m pytest -vv -ra --maxfail=1 --tb=short --cov=src --cov-report=term-missing
