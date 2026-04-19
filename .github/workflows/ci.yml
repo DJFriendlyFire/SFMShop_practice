@@ -14,13 +14,12 @@ jobs:
 
     steps:
       - name: Забрать код
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Установить Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: "poetry"
 
       - name: Установить poetry
         run: pip install poetry
