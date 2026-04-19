@@ -37,4 +37,4 @@ jobs:
           DB_NAME: test_db
           DB_HOST: localhost
           DB_PORT: "5432"
-        run: poetry run pytest --cov=src --cov-report=term-missing
+        run: poetry run pytest -vv -ra --maxfail=1 --tb=short --cov=src --cov-report=term-missing
